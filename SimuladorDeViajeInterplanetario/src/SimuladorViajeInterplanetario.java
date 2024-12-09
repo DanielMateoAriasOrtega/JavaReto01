@@ -64,6 +64,65 @@ public class SimuladorViajeInterplanetario {
     }
 
     // Funcion para seleccionar nave espacial
+    static void seleccionarNave() {
+        System.out.println("\nLista de Naves Espaciales:");
+        for (int i = 0; i < naves.length; i++) {
+            System.out.printf("%d. %s (Velocidad: %.0f km/h)\n", i + 1, naves[i], velocidades[i]);
+        }
 
+        System.out.print("Seleccione una nave: ");
+        int seleccion = sc.nextInt() - 1;
+
+        if (seleccion >= 0 && seleccion < naves.length) {
+            naveSeleccionada = seleccion;
+            System.out.printf("Has seleccionado la nave %s. Velocidad máxima: %.0f km/h.\n", naves[seleccion], velocidades[seleccion]);
+
+            System.out.print("Ingrese la cantidad de pasajeros: ");
+            cantidadPasajeros = sc.nextInt();
+            if (cantidadPasajeros > 0) {
+                System.out.printf("Cantidad de pasajeros registrada: %d.\n", cantidadPasajeros);
+            } else {
+                System.out.println("Cantidad inválida. Intente nuevamente.");
+                cantidadPasajeros = 0;
+            }
+        } else {
+            System.out.println("Selección inválida.");
+        }
+    }
+
+    static void iniciarViaje() {
+        if (planetaSeleccionado == -1 || naveSeleccionada == -1) {
+            System.out.println("Debe seleccionar un planeta y una nave antes de iniciar el viaje.");
+            return;
+        }
+
+        double distancia = distancias[planetaSeleccionado];
+        double velocidad = velocidades[naveSeleccionada];
+        double duracionHoras = distancia / velocidad;
+        double duracionDias = duracionHoras / 24;
+
+        System.out.printf("\nIniciando el viaje al planeta %s con la nave %s.\n", planetas[planetaSeleccionado], naves[naveSeleccionada]);
+        System.out.printf("Distancia: %.0f km. Velocidad: %.0f km/h.\n", distancia, velocidad);
+        System.out.printf("Duración estimada del viaje: %.2f días.\n", duracionDias);
+
+        // Simular progreso del viaje
+        for (int progreso = 0; progreso <= 100; progreso += 10) {
+            System.out.printf("Progreso del viaje: %d%% completado.\n", progreso);
+
+            if (progreso == 0) {
+                System.out.println("Inicio del viaje...");
+            } else if (progreso == 50) {
+                System.out.println("Mitad del camino alcanzada.");
+            } else if (progreso == 100) {
+                System.out.println("Llegada al destino. ¡Has alcanzado el planeta!");
+            }
+
+            try {
+                Thread.sleep(1000); // Pausa de 1 segundo para simular el progreso
+            } catch (InterruptedException e) {
+                System.out.println("Error en la simulación.");
+            }
+        }
+    }
 
 }
